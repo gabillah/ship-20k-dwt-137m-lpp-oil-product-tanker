@@ -1,0 +1,19 @@
+1. EDIT EXCEL calculation_p1.xlsx
+SAVE
+
+2.
+OTOMATIS: LANGSUNG SAJA JALANKAN (KLIK 2 KALI) run_export.bat (ISINYA SAMA SEPERTI RUN TERMINAL DI BAWAH INI).
+MANUAL: BUKA TERMINAL DAN JALANKAN PERINTAH DI BAWAH
+# 1. Buat venv dulu
+python -m venv .venv
+
+# 2. Baru aktifkan
+.\.venv\Scripts\Activate.ps1
+
+# 3. Install dependensi
+pip install openpyxl pandas
+
+# 4. Jalankan script
+python excel_to_latex.py
+
+3. JALANKAN report.tex

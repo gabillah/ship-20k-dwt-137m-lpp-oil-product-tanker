@@ -1,0 +1,272 @@
+% ===========================================================================================
+% \chapter{PREAMBLE}
+
+\documentclass[12pt, a4paper]{book}
+
+% ── Encoding & fonts (XeLaTeX) ───────────────────────────────────
+\usepackage{fontspec}
+\setmainfont{Times New Roman}
+\setsansfont{Arial}
+\setmonofont{Courier New}
+
+% ── Language ─────────────────────────────────────────────────────
+\usepackage{polyglossia}
+\setdefaultlanguage{english}
+
+% ── Mathematics ──────────────────────────────────────────────────
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+
+% ── Page layout ──────────────────────────────────────────────────
+\usepackage[
+  a4paper,
+  top    = 2.5cm,
+  bottom = 2.5cm,
+  left   = 3.0cm,
+  right  = 2.5cm
+]{geometry}
+
+% ── Tables ───────────────────────────────────────────────────────
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+
+% ── Figures ──────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{float}
+
+% ── Hyperlinks ───────────────────────────────────────────────────
+\usepackage[
+  colorlinks = true,
+  linkcolor  = blue,
+  citecolor  = blue,
+  urlcolor   = blue
+]{hyperref}
+
+% ── Index (MakeIndex) ────────────────────────────────────────────
+\usepackage{makeidx}
+\makeindex
+
+% ── Bibliography (BIBTeX) ────────────────────────────────────────
+\usepackage{natbib}
+
+% ── Units ────────────────────────────────────────────────────────
+\usepackage{siunitx}
+\sisetup{output-decimal-marker={.}}
+
+% ── Source code listing ──────────────────────────────────────────
+\usepackage{listings}
+\lstset{
+  basicstyle   = \ttfamily\small,
+  breaklines   = true,
+  frame        = single,
+  numbers      = left,
+  numberstyle  = \tiny,
+  keywordstyle = \bfseries,
+  language     = Python
+}
+
+% ── Custom colours ───────────────────────────────────────────────
+\usepackage{xcolor}
+\definecolor{pyblue}{HTML}{306998}
+
+% ===========================================================================================
+% \subsection{Image}
+% ===========================================================================================
+\usepackage{graphicx}
+\graphicspath{
+	{../images/}
+	{}
+	{}
+}
+
+% ─────────────────────────────────────────────────────────────────
+%  AUTO-GENERATED VALUES from lines_plan.ipynb
+%  File ini ditulis oleh notebook; jangan edit manual.
+% ─────────────────────────────────────────────────────────────────
+\input{calc_values}
+
+% ── Document metadata ────────────────────────────────────────────
+\title{%
+  \textbf{Verifikasi Lines Plan --- Oil Tanker 20704 DWT}\\[0.4em]
+  \large Laporan Perhitungan Otomatis dari Jupyter Notebook
+}
+\author{Daffa \\ \small Politeknik Perkapalan Negeri Surabaya}
+\date{\today}
+
+% ─────────────────────────────────────────────────────────────────
+\begin{document}
+% ─────────────────────────────────────────────────────────────────
+
+\maketitle
+\tableofcontents
+\newpage
+
+% ─────────────────────────────────────────────────────────────────
+\section{Pendahuluan}
+\label{sec:intro}
+% ─────────────────────────────────────────────────────────────────
+
+\index{Lines Plan}
+\index{Oil Tanker}
+Laporan ini menyajikan hasil verifikasi \emph{luas penampang} (\textit{cross-sectional area})
+tiap \emph{station} dari rencana garis (\textit{Lines Plan}) kapal tanker minyak
+berkapasitas \textbf{20.704 DWT}.
+
+Nilai-nilai numerik dihitung dalam \texttt{lines\_plan.ipynb} dan diekspor secara otomatis
+ke \texttt{calc\_values.tex} melalui mekanisme \verb|\newcommand|, sehingga
+setiap angka dalam laporan ini \emph{selalu sinkron} dengan notebook --- tanpa
+risiko salah salin (\textit{copy-paste error}).
+
+% ─────────────────────────────────────────────────────────────────
+\section{Metodologi Verifikasi}
+\label{sec:method}
+% ─────────────────────────────────────────────────────────────────
+
+\index{verifikasi luas}
+Verifikasi dilakukan dengan membandingkan dua hasil integrasi luas penampang:
+
+\begin{itemize}
+  \item $A_1$ --- luas hasil metode integrasi pertama (\si{m^2})
+  \item $A_2$ --- luas hasil metode integrasi kedua (\si{m^2})
+\end{itemize}
+
+\noindent
+Formula yang digunakan (mereplikasi formula Excel pada sel F dan G):
+
+\begin{equation}
+  \Delta = |A_1 - A_2|
+  \label{eq:selisih}
+\end{equation}
+
+\begin{equation}
+  \varepsilon\,[\%] = \frac{\Delta}{A_1} \times 100
+  \label{eq:pct}
+\end{equation}
+
+\noindent
+Total penyimpangan dihitung sebagai:
+
+\begin{equation}
+  \Sigma\,\varepsilon = \sum_{\text{semua station}} \varepsilon_i
+  \label{eq:sum}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────
+\section{Hasil Perhitungan}
+\label{sec:results}
+% ─────────────────────────────────────────────────────────────────
+
+\index{hasil perhitungan}
+Tabel~\ref{tab:linesplan} menyajikan hasil verifikasi untuk seluruh
+\LPJumlahStation\ station (station $-2$ s.d.\ $20$), yang mereplikasi
+isi sel B434:G458 pada sheet \textit{Lines Plan}.
+
+\begin{longtable}{crrrr}
+  \caption{Verifikasi Luas Penampang per Station}
+  \label{tab:linesplan} \\
+  \toprule
+  \textbf{Station} & \textbf{Luas $A_1$ (m$^2$)} & \textbf{Luas $A_2$ (m$^2$)} &
+  \textbf{Selisih (m$^2$)} & \textbf{\% Selisih} \\
+  \midrule
+  \endfirsthead
+  \multicolumn{5}{c}{\tablename\ \thetable{} (lanjutan)} \\
+  \toprule
+  \textbf{Station} & \textbf{Luas $A_1$ (m$^2$)} & \textbf{Luas $A_2$ (m$^2$)} &
+  \textbf{Selisih (m$^2$)} & \textbf{\% Selisih} \\
+  \midrule
+  \endhead
+  \bottomrule
+  \endfoot
+  $-2$ & \LPStaMinTwoAone  & \LPStaMinTwoAtwo  & \LPStaMinTwoSel  & --- \\
+  $-1$ & \LPStaMinOneAone  & \LPStaMinOneAtwo  & \LPStaMinOneSel  & --- \\
+  $0$  & \LPStaZeroAone   & \LPStaZeroAtwo   & \LPStaZeroSel   & --- \\
+  $1$  & \LPStaOneAone   & \LPStaOneAtwo   & \LPStaOneSel   & \LPStaOnePct  \\
+  $2$  & \LPStaTwoAone   & \LPStaTwoAtwo   & \LPStaTwoSel   & \LPStaTwoPct  \\
+  $3$  & \LPStaThreeAone   & \LPStaThreeAtwo   & \LPStaThreeSel   & \LPStaThreePct  \\
+  $4$  & \LPStaFourAone   & \LPStaFourAtwo   & \LPStaFourSel   & \LPStaFourPct  \\
+  $5$  & \LPStaFiveAone   & \LPStaFiveAtwo   & \LPStaFiveSel   & \LPStaFivePct  \\
+  $6$  & \LPStaSixAone   & \LPStaSixAtwo   & \LPStaSixSel   & \LPStaSixPct  \\
+  $7$  & \LPStaSevenAone   & \LPStaSevenAtwo   & \LPStaSevenSel   & \LPStaSevenPct  \\
+  $8$  & \LPStaEightAone   & \LPStaEightAtwo   & \LPStaEightSel   & \LPStaEightPct  \\
+  $9$  & \LPStaNineAone   & \LPStaNineAtwo   & \LPStaNineSel   & \LPStaNinePct  \\
+  $10$ & \LPStaTenAone  & \LPStaTenAtwo  & \LPStaTenSel  & \LPStaTenPct \\
+  $11$ & \LPStaElevenAone  & \LPStaElevenAtwo  & \LPStaElevenSel  & \LPStaElevenPct \\
+  $12$ & \LPStaTwelveAone  & \LPStaTwelveAtwo  & \LPStaTwelveSel  & \LPStaTwelvePct \\
+  $13$ & \LPStaThirteenAone  & \LPStaThirteenAtwo  & \LPStaThirteenSel  & \LPStaThirteenPct \\
+  $14$ & \LPStaFourteenAone  & \LPStaFourteenAtwo  & \LPStaFourteenSel  & \LPStaFourteenPct \\
+  $15$ & \LPStaFifteenAone  & \LPStaFifteenAtwo  & \LPStaFifteenSel  & \LPStaFifteenPct \\
+  $16$ & \LPStaSixteenAone  & \LPStaSixteenAtwo  & \LPStaSixteenSel  & \LPStaSixteenPct \\
+  $17$ & \LPStaSeventeenAone  & \LPStaSeventeenAtwo  & \LPStaSeventeenSel  & \LPStaSeventeenPct \\
+  $18$ & \LPStaEighteenAone  & \LPStaEighteenAtwo  & \LPStaEighteenSel  & \LPStaEighteenPct \\
+  $19$ & \LPStaNineteenAone  & \LPStaNineteenAtwo  & \LPStaNineteenSel  & \LPStaNineteenPct \\
+  $20$ & \LPStaTwentyAone  & \LPStaTwentyAtwo  & \LPStaTwentySel  & \LPStaTwentyPct \\
+  \midrule
+  \multicolumn{4}{r}{\textbf{SUM \% Selisih}} & \textbf{\LPSumPct} \\
+  \bottomrule
+\end{longtable}
+
+\noindent
+Total penyimpangan persentase seluruh station (replikasi sel G458):
+
+\begin{equation}
+  \Sigma\,\varepsilon = \LPSumPct\,\%
+  \label{eq:sumresult}
+\end{equation}
+
+% ─────────────────────────────────────────────────────────────────
+\section{Penjelasan Kode Python}
+\label{sec:code}
+% ─────────────────────────────────────────────────────────────────
+
+\index{Jupyter Notebook}
+\index{openpyxl}
+Sel utama dalam \texttt{lines\_plan.ipynb} yang mereplikasi formula Excel:
+
+\begin{lstlisting}[language=Python,
+  caption={Replikasi formula Excel --- sel F dan G (Selisih dan \% Selisih)}]
+for station, (A1, A2) in station_data.items():
+    selisih = abs(A1 - A2)           # =ABS(D-E)
+    pct = (selisih / A1 * 100) if A1 > 0 else None  # =(F/D)*100
+
+# SUM % Selisih  -- replikasi =SUM(G435:G457)
+sum_pct = sum(r["pct"] for r in results if r["pct"] is not None)
+\end{lstlisting}
+
+\noindent
+Nilai kemudian diekspor ke \texttt{calc\_values.tex}:
+
+\begin{lstlisting}[language=Python,
+  caption={Ekspor nilai ke LaTeX via \textbackslash newcommand}]
+lines += [
+    rf"\newcommand{{\LP{mac}Aone}}{{{fmt(r['luas_A1'], 4)}}}",
+    rf"\newcommand{{\LP{mac}Atwo}}{{{fmt(r['luas_A2'], 4)}}}",
+    rf"\newcommand{{\LP{mac}Sel}}{{{fmt(r['selisih'], 6)}}}",
+    rf"\newcommand{{\LP{mac}Pct}}{{{fmt(pct_val, 4)}}}",
+]
+\end{lstlisting}
+
+% ─────────────────────────────────────────────────────────────────
+\section{Kesimpulan}
+\label{sec:conclusion}
+% ─────────────────────────────────────────────────────────────────
+
+Hasil verifikasi menunjukkan total penyimpangan luas penampang antar dua metode
+integrasi sebesar $\Sigma\,\varepsilon = \LPSumPct\,\%$ untuk seluruh
+\LPJumlahStation\ station (B434:G458).
+Nilai ini konsisten dengan hasil pada file Excel asli (sel G458).
+
+% ─────────────────────────────────────────────────────────────────
+%  Bibliography (BIBTeX)
+% ─────────────────────────────────────────────────────────────────
+\nocite{*}
+\bibliographystyle{plainnat}
+\bibliography{references}
+
+% ─────────────────────────────────────────────────────────────────
+%  Index (MakeIndex)
+% ─────────────────────────────────────────────────────────────────
+\printindex
+
+\end{document}
