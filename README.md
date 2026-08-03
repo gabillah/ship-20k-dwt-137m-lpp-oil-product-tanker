@@ -1,8 +1,5 @@
 # Judul topik: Portofolio projek Ship Lines Plan dan General Arrangement, 20704 DWT (handymax) Product Oil Tanker, MTM Antwerp.
 Nama: Daffa Gabillah Maulana Gapur<br>
-NRP: 0322040051<br>
-
-Link: https://github.com/gabillah/project-ship-oil-tanker-20704-dwt-1
 
 ## Hasil perhitungan:
 Type kapal: 20704 DWT (handymax) Product Oil Tanker<br>
